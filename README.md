@@ -1,0 +1,37 @@
+# solo-automation
+
+The Automation cell: its own API (Railway, serverless) and its own Neon
+database, made from `cell.yaml` with [solo-cell-kit](../solo-cell-kit). It
+reuses empire-platform for identity, authorization, executions and audit over
+HTTP with the caller's token.
+
+| | |
+|---|---|
+| API | Railway project `solo-automation`, service `automation-api` (Serverless) |
+| Data | Neon project `solo-automation`, database `automation` |
+| Registry | solo-empire `repository-catalog/registries/online-systems.yaml` (`automation`) |
+
+## API
+
+Every resource has list, stats, get, get-by-legacy-id, create, patch and delete
+(see `cellkit/app.py`). Permissions are `automation.<resource>:read|write|delete`.
+
+| Path | Resource | Filters |
+|---|---|---|
+| `/v1/cron-jobs` | cron-job | `is_active`, `job_type`, `last_status`, `name` |
+| `/v1/automation-rules` | automation-rule | `is_active` |
+| `/v1/workflow-pipelines` | workflow-pipeline | `is_active` |
+| `/v1/automation-log` | automation-log | `action_type`, `rule_id`, `pipeline_id`, `success` |
+
+## Develop and operate
+
+```bash
+uv venv .venv && uv pip install --python .venv/bin/python -e ".[dev]"
+.venv/bin/pytest -q
+NEON_API_KEY=... .venv/bin/automation-db provision
+npm install && railway config apply && railway up --ci --service automation-api
+railway scale --service automation-api asia-southeast1-eqsg3a=1 us-east4-eqdc4a=0   # next to Neon and the platform
+```
+
+Railway variables: `AUTOMATION_DB_MODE=hosted`, `AUTOMATION_DB_URL_API`,
+`AUTOMATION_JWT_PUBLIC_KEY_PEM`, `AUTOMATION_JWT_ISSUER`, `EMPIRE_PLATFORM_URL`.

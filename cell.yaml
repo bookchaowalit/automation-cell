@@ -1,0 +1,62 @@
+# Automation cell: scheduled jobs (what the cron runner runs and when), task automation rules, workflow
+# pipelines and the log of what each run did. affected_tasks holds Tasks API ids.
+cell: automation
+title: Automation
+port: 3625
+resources:
+  cron-job:
+    table: cron_jobs
+    plural: cron-jobs
+    filters: [is_active, job_type, last_status, name]
+    fields:
+      name: {type: text, required: true, max_length: 200}
+      description: {type: text}
+      schedule: {type: text, required: true, max_length: 200}
+      job_type: {type: text, required: true, max_length: 80}
+      params: {type: text, default: "{}"}
+      is_active: {type: bool, default: true}
+      last_run_at: {type: timestamp}
+      next_run_at: {type: timestamp}
+      last_status: {type: text, default: pending, max_length: 40}
+      retry_count: {type: int, default: 0, min: 0}
+      last_retry_at: {type: timestamp}
+  automation-rule:
+    table: automation_rules
+    plural: automation-rules
+    filters: [is_active]
+    fields:
+      name: {type: text, required: true, max_length: 200}
+      description: {type: text}
+      trigger: {type: text, required: true}
+      action: {type: text, required: true}
+      project_filter: {type: text, max_length: 200}
+      priority_filter: {type: int}
+      category_filter: {type: text, max_length: 200}
+      is_active: {type: bool, default: true}
+      execution_count: {type: int, default: 0, min: 0}
+      last_executed_at: {type: timestamp}
+  workflow-pipeline:
+    table: workflow_pipelines
+    plural: workflow-pipelines
+    filters: [is_active]
+    fields:
+      name: {type: text, required: true, max_length: 200}
+      description: {type: text}
+      steps: {type: text, required: true}
+      is_active: {type: bool, default: true}
+      run_count: {type: int, default: 0, min: 0}
+      last_run_at: {type: timestamp}
+  automation-log:
+    table: automation_log
+    plural: automation-log
+    filters: [action_type, rule_id, pipeline_id, success]
+    fields:
+      rule_id: {type: ref, to: automation-rule}
+      pipeline_id: {type: ref, to: workflow-pipeline}
+      action_type: {type: text, required: true, max_length: 40}
+      description: {type: text, required: true}
+      affected_tasks: {type: text}
+      affected_count: {type: int, default: 0, min: 0}
+      success: {type: bool, default: true}
+      error_message: {type: text}
+      executed_at: {type: timestamp}
