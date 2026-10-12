@@ -8,8 +8,8 @@ HTTP with the caller's token.
 
 | | |
 |---|---|
-| API | Railway project `solo-automation`, service `automation-api` (Serverless) |
-| Data | Neon project `solo-automation`, database `automation` |
+| API | Railway project `automation-cell`, service `automation-api` (Serverless) |
+| Data | Neon project `automation-cell`, database `automation` |
 | Registry | solo-empire `repository-catalog/registries/online-systems.yaml` (`automation`) |
 
 ## API
