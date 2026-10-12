@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "automation": {
+      "command": ".venv/bin/automation-mcp",
+      "args": []
+    }
+  }
+}
