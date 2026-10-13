@@ -1,5 +1,4 @@
-# automation-cell
-
+# platform-automation-api
 The Automation cell: its own API (Railway, serverless) and its own Neon
 database, described by `cell.yaml` and served by the code in `src/cellkit/`, which
 this repository owns. It
@@ -8,8 +7,8 @@ HTTP with the caller's token.
 
 | | |
 |---|---|
-| API | Railway project `automation-cell`, service `automation-api` (Serverless) |
-| Data | Neon project `automation-cell`, database `automation` |
+| API | Railway project `platform-automation-api`, service `automation-api` (Serverless) |
+| Data | Neon project `platform-automation-api`, database `automation` |
 | Registry | solo-empire `repository-catalog/registries/online-systems.yaml` (`automation`) |
 
 ## API
